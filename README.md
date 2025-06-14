@@ -18,10 +18,10 @@ In these tutorials for reinforcement learning, it covers from the basic RL algor
 # Table of Contents
 
 * Tutorials
-    * [Simple entry example](contents/1_command_line_reinforcement_learning)
-    * [Q-learning](contents/2_Q_Learning_maze)
-    * [Sarsa](contents/3_Sarsa_maze)
-    * [Sarsa(lambda)](contents/4_Sarsa_lambda_maze)
+    * [Simple entry example](contents/ch1_command_line_reinforcement_learning)
+    * [Q-learning](contents/ch2_Q_Learning_maze)
+    * [Sarsa](contents/ch3_Sarsa_maze)
+    * [Sarsa(lambda)](contents/ch4_Sarsa_lambda_maze)
     * [Deep Q Network (DQN)](contents/5_Deep_Q_Network)
     * [Using OpenAI Gym](contents/6_OpenAI_gym)
     * [Double DQN](contents/5.1_Double_DQN)

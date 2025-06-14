@@ -8,14 +8,12 @@ View more on my tutorial page: https://morvanzhou.github.io/tutorials/
 import numpy as np
 import pandas as pd
 
-
 class RL(object):
     def __init__(self, action_space, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
         self.actions = action_space  # a list
         self.lr = learning_rate
         self.gamma = reward_decay
         self.epsilon = e_greedy
-
         self.q_table = pd.DataFrame(columns=self.actions, dtype=np.float64)
 
     def check_state_exist(self, state):
@@ -45,15 +43,13 @@ class RL(object):
     def learn(self, *args):
         pass
 
-
 # backward eligibility traces
 class SarsaLambdaTable(RL):
     def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9, trace_decay=0.9):
         super(SarsaLambdaTable, self).__init__(actions, learning_rate, reward_decay, e_greedy)
-
-        # backward view, eligibility trace.
+        # 后向观测算法, eligibility trace.
         self.lambda_ = trace_decay
-        self.eligibility_trace = self.q_table.copy()
+        self.eligibility_trace = self.q_table.copy() # 空的 eligibility trace 表
 
     def check_state_exist(self, state):
         if state not in self.q_table.index:
@@ -64,7 +60,6 @@ class SarsaLambdaTable(RL):
                     name=state,
                 )
             self.q_table = self.q_table.append(to_be_append)
-
             # also update eligibility trace
             self.eligibility_trace = self.eligibility_trace.append(to_be_append)
 
@@ -77,17 +72,14 @@ class SarsaLambdaTable(RL):
             q_target = r  # next state is terminal
         error = q_target - q_predict
 
-        # increase trace amount for visited state-action pair
-
+        # 这里开始不同:
+        # 对于经历过的 state-action, 我们让他+1, 证明他是得到 reward 路途中不可或缺的一环
         # Method 1:
         # self.eligibility_trace.loc[s, a] += 1
-
-        # Method 2:
+        # Method 2: 实验证明选择下面这种方法会有更好的效果
         self.eligibility_trace.loc[s, :] *= 0
         self.eligibility_trace.loc[s, a] = 1
-
         # Q update
         self.q_table += self.lr * error * self.eligibility_trace
-
         # decay eligibility trace after update
         self.eligibility_trace *= self.gamma*self.lambda_

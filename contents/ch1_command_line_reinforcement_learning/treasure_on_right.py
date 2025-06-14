@@ -11,8 +11,6 @@ import pandas as pd
 import time
 
 np.random.seed(2)  # reproducible
-
-
 N_STATES = 6   # the length of the 1 dimensional world
 ACTIONS = ['left', 'right']     # available actions
 EPSILON = 0.9   # greedy police
@@ -21,7 +19,6 @@ GAMMA = 0.9    # discount factor
 MAX_EPISODES = 13   # maximum episodes
 FRESH_TIME = 0.3    # fresh time for one move
 
-
 def build_q_table(n_states, actions):
     table = pd.DataFrame(
         np.zeros((n_states, len(actions))),     # q_table initial values
@@ -29,7 +26,6 @@ def build_q_table(n_states, actions):
     )
     # print(table)    # show table
     return table
-
 
 def choose_action(state, q_table):
     # This is how to choose an action
@@ -40,7 +36,7 @@ def choose_action(state, q_table):
         action_name = state_actions.idxmax()    # replace argmax to idxmax as argmax means a different function in newer version of pandas
     return action_name
 
-
+# 规则: 只有当 o 移动到了 T, 探索者才会得到唯一的一个奖励, 奖励值 R=1, 其他情况都没有奖励.
 def get_env_feedback(S, A):
     # This is how agent will interact with the environment
     if A == 'right':    # move right
@@ -58,7 +54,6 @@ def get_env_feedback(S, A):
             S_ = S - 1
     return S_, R
 
-
 def update_env(S, episode, step_counter):
     # This is how environment be updated
     env_list = ['-']*(N_STATES-1) + ['T']   # '---------T' our environment
@@ -72,7 +67,6 @@ def update_env(S, episode, step_counter):
         interaction = ''.join(env_list)
         print('\r{}'.format(interaction), end='')
         time.sleep(FRESH_TIME)
-
 
 def rl():
     # main part of RL loop
@@ -99,7 +93,6 @@ def rl():
             update_env(S, episode, step_counter+1)
             step_counter += 1
     return q_table
-
 
 if __name__ == "__main__":
     q_table = rl()
